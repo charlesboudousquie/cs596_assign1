@@ -1,0 +1,99 @@
+# Euclidean distance function
+def euclid_dist(a, b):
+    squared = (a-b) ** 2
+    return math.sqrt(squared.sum())
+
+def manhattan_dist(a, b):
+    diff = a-b
+    return np.abs(diff).sum()
+
+
+# First verify euclidean and manhattan dist functions
+print('Euclid distances comparing first 3 rows against fourth row')
+print('versicolor: ', euclid_dist(train_features_scaled[0], train_features_scaled[3]))
+print('setosa: ', euclid_dist(train_features_scaled[1], train_features_scaled[3]))
+print('virginica: ', euclid_dist(train_features_scaled[2], train_features_scaled[3]))
+print('virginica is closest so that should be the prediction')
+print()
+
+print('Manhattan distances comparing first 3 rows against fourth row')
+print('versicolor: ', manhattan_dist(train_features_scaled[0], train_features_scaled[3]))
+print('setosa: ', manhattan_dist(train_features_scaled[1], train_features_scaled[3]))
+print('virginica: ', manhattan_dist(train_features_scaled[2], train_features_scaled[3]))
+print('virginica is closest so that should be the prediction')
+print()
+
+# feature values for verification
+# [[-0.84338568  2.01244032 -1.12816027 -0.87923721]
+#  [ 1.3915499  -0.31283605  1.17545106  0.6961805 ]
+#  [ 0.4815819  -1.987088    0.33930477  0.33978907]]
+
+# labels for unit test: 
+#  49         setosa
+# 28      virginica
+# 144    versicolor
+
+# Min euclidean distance is setosa for a distance of 1.713
+# Min manhattan distance is setosa for a distance of 3.01
+# Euclidean distance is better which makes sense because
+# a straight line between two points represents the shortest
+# distance between two points. Manhattan cannot move diagonally.
+
+features_first_3_rows = train_features_scaled[0:3]
+labels_first_3_rows = train_labels[0:3]
+print(f'features for unit test training set: \n {features_first_3_rows}')
+print(f'labels for unit test training set: \n {labels_first_3_rows}')
+
+features_fourth_row = train_features_scaled[4]
+labels_fourth_row = train_labels[4]
+
+print(f'features for unit test, test set: \n {features_fourth_row}')
+print(f'label for unit test: \n {labels_fourth_row}')
+
+
+
+prediction = knn_helper(features_first_3_rows, labels_first_3_rows, [features_fourth_row], 1, 'euclidean')
+assert prediction == 'virginica'
+
+prediction = knn_helper(features_first_3_rows, labels_first_3_rows, [features_fourth_row], 1, 'manhattan')
+assert prediction == 'virginica'
+
+
+class knnImpl():
+    def __init__(n_neighbors, distance_method):
+        self.n_neighbors = n_neighbors
+        self.distance_method = distance_method
+    
+    def fit(features, labels):
+        self.features = features
+        self.labels = labels
+
+    def predict(features_to_predict):
+        # go through each row and find the distances
+        predictions = []
+
+        # use row length 
+        indices = range(1, len(df.shape[1]))
+
+        for our_row in self.features.rows:
+            distances = []
+            # find distance from row in our features
+            # to the row we must predict
+            for their_row in features_to_predict.rows:
+                feat_dist = self.distance_method(our_row, their_row)
+                distances.append(feat_dist)
+
+            
+            # make a table of index and distance
+            table = pd.DataFrame({
+                'index' : 
+            })
+
+            # sort table by distance,
+            # then find top k distances with corresponding index
+            # then use majority rule to predict class
+            
+        
+        # return predictions
+        
+        
